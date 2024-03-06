@@ -1,150 +1,157 @@
 const { Schema, model } = require("mongoose");
 
 const EmployeeSchema = new Schema({
-  FirstName: {
+  firstName: {
     type: String,
     required: true,
   },
-  LastName: {
+  lastName: {
     type: String,
     required: true,
   },
-  DateOfBirth: {
+  dateOfBirth: {
     type: Date,
-    required: true
+    required: true,
   },
-  Gender: {
+  gender: {
     type: String,
   },
-  ProfilePicture: {
+  profilePicture: {
     type: String, // To store the URL/path to the image
   },
-  UploadedDocuments: [
+  uploadedDocuments: [
     {
-      FileName: {
+      fileName: {
         type: String,
       },
-      FilePath: {
+      filePath: {
         type: String,
       },
-    }, 
-    ],
-  ContactInformation: {
-    EmailAddress: {
+    },
+  ],
+  contactInformation: {
+    emailAddress: {
       type: String,
       required: true,
       trim: true,
       unique: true,
       lowercase: true,
-      match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address']
+      /* match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address'] */
     },
-    PhoneNumber: {
+    phoneNumber: {
       type: String,
       required: true,
       trim: true,
       unique: true,
-      match: [/^\+\d{11,15}$/, 'Please enter a valid phone number']
-    }
+      /* match: [/^\+\d{11,15}$/, 'Please enter a valid phone number'] */
+    },
   },
-  Address: {
-    StreetAddress: {
+  address: {
+    streetAddress: {
       type: String,
       required: true,
     },
-    City: {
+    city: {
       type: String,
       required: true,
     },
-    StateProvince: {
+    stateProvince: {
       type: String,
     },
-    PostalCode: {
+    postalCode: {
       type: String,
-      trim: true
-    }
+      trim: true,
+    },
   },
-  JobDetails: {
-    JobTitle: {
+  jobDetails: {
+    jobTitle: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
-    DepartmentID: {
+    departmentID: {
       type: String,
-      enum: ["Web Development", "Financing", "Marketing", "HR", "Data Analytics", "Design"],
+      enum: [
+        "Web Development",
+        "Financing",
+        "Marketing",
+        "HR",
+        "Data Analytics",
+        "Design",
+      ],
       required: true,
-      trim: true
+      trim: true,
     },
-    ManagerID: {
+    managerID: {
       type: String,
-      trim: true
+      trim: true,
     },
-    StartDate: {
+    startDate: {
       type: Date,
-      required: true
+      required: true,
     },
-    EndDate: {
-      type: Date
-    }
-  },
-  SalaryInformation: {
-    Salary: {
-      type: Number,
-      required: true
+    endDate: {
+      type: Date,
     },
-    Currency: {
-      type: String,
-      trim: true
-    }
   },
-  WorkHours: {
-    WeeklyWorkHours: {
+  salaryInformation: {
+    salary: {
       type: Number,
       required: true,
-      min: 0
-    }
+    },
+    currency: {
+      type: String,
+      trim: true,
+    },
   },
-  BenefitsAndPerks: {
+  workHours: {
+    weeklyWorkHours: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+  },
+  benefitsAndPerks: {
     HealthInsurance: {
       type: Boolean,
     },
-    RetirementPlans: {
+    retirementPlans: {
       type: Boolean,
-    }
-  },
-  EmergencyContact: {
-    Name: {
-      type: String,
-      trim: true
     },
-    PhoneNumber: {
+  },
+  emergencyContact: {
+    name: {
       type: String,
       trim: true,
-      match: [/^\+\d{11,15}$/, 'Please enter a valid phone number']
     },
-    Relationship: {
+    phoneNumberEmergency: {
       type: String,
-      trim: true
-    }
+      trim: true,
+      match: [/^\+\d{11,15}$/, "Please enter a valid phone number"],
+    },
+    relationship: {
+      type: String,
+      trim: true,
+    },
   },
-  SkillsAndQualifications: {
+  skillsAndQualifications: {
     Skills: {
       type: [String],
     },
-    Education: {
-      type: [String],
-    }
-  },
-  PerformanceMetrics: {
-    PerformanceReviews: {
+    education: {
       type: [String],
     },
-    Goals: {
+  },
+  performanceMetrics: {
+    performanceReviews: {
       type: [String],
-    }
-  }
+    },
+    goals: {
+      type: [String],
+    },
+  },
 });
 
-const Employee = model('Employee', EmployeeSchema);
+const Employee = model("Employee", EmployeeSchema);
 
 module.exports = Employee;

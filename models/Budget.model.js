@@ -75,12 +75,7 @@ const budgetSchema = new Schema({
     interestExpense: { type: Number, default: 0 },
     depreciationAndAmortization: { type: Number, default: 0 },
   },
-  notesComments: {
-    salariesAndWages: { type: String, default: "" },
-    rentLease: { type: String, default: "" },
-    taxes: { type: String, default: "" },
-    depreciationAndAmortization: { type: String, default: "" },
-  },
+  notesComments: { type: String },
   approvalStatus: {
     type: String,
     enum: ["Pending", "Approved", "Rejected"],
