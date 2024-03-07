@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const budgetSchema = new Schema({
   budgetName: { type: String, required: true },
-  startDate: { type: Date, required: true },
+  startDate: { type: Date, default: Date.now },
   endDate: { type: Date, required: true },
   incomeCategories: {
     revenue: { type: Number, default: 0 },
