@@ -112,7 +112,7 @@ const EmployeeSchema = new Schema({
     },
   },
   benefitsAndPerks: {
-    HealthInsurance: {
+    healthInsurance: {
       type: Boolean,
     },
     retirementPlans: {
@@ -135,7 +135,7 @@ const EmployeeSchema = new Schema({
     },
   },
   skillsAndQualifications: {
-    Skills: {
+    skills: {
       type: [String],
     },
     education: {
