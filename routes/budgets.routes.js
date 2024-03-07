@@ -110,11 +110,9 @@ router.put("/budgets/:id", cors(corsOptions), async (req, res, next) => {
 });
 
 router.delete("/budgets/:id", cors(corsOptions), async (req, res, next) => {
-  Budget.findByIdAndDelete(req.params.id);
+  await Budget.findByIdAndDelete(req.params.id);
   try {
-    () => {
-      res.send();
-    };
+    res.json({ message: "Budget deleted!" });
   } catch (error) {
     next(error);
   }
