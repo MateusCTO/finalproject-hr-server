@@ -20,8 +20,8 @@ router.get("/employees/:id", async (req, res) => {
     // destructure the id via route params
     const { id } = req.params;
     // find the Employee via ID.
-    const singleEmplyoee = await Employee.findById(id);
-    res.status(200).json(singleEmplyoee);
+    const singleEmployee = await Employee.findById(id);
+    res.status(200).json(singleEmployee);
   } catch (error) {
     res
       .status(500)
@@ -76,71 +76,30 @@ router.post("/employees", async (req, res) => {
 });
 
 /* Update Employee Info */
-router.put("/employee/:id", async (req, res) => {
-  try {
+router.put("/employees/:id", async (req, res) => {
     /* Destructure the id via router params */
-    const { id } = req.params;
-    const {
-      firstName,
-      lastName,
-      dateOfBirth,
-      gender,
-      profilePicture,
-      uploadedDocuments,
-      contactInformation: { emailAddress, phoneNumber },
-      address: { streetAddress, city, stateProvince, postalCode },
-      jobDetails: { jobTitle, departmentID, managerID, startDate, endDate },
-      salaryInformation: { salary, currency },
-      workHours: { weeklyWorkHours },
-      benefitsAndPerks: { healthInsurance, retirementPlans },
-      emergencyContact: { name, phoneNumberEmergency, relationship },
-      skillsAndQualifications: { skills, education },
-      performanceMetrics: { performanceReviews, goals },
-    } = req.body;
-
-    if (
-      !firstName ||
-      !lastName ||
-      !dateOfBirth ||
-      !emailAddress ||
-      !phoneNumber ||
-      !streetAddress ||
-      !city ||
-      !jobTitle ||
-      !departmentID ||
-      !startDate ||
-      !salary ||
-      !weeklyWorkHours
-    ) {
-      return res
-        .status(400)
-        .json({ message: "Please fill all mandatory fields!" });
-    }
-
-    /* Find the employee via the id and send it back to the client */
-    const updateEmployee = await Employee.findByIdAndUpdate(
-      id,
-      {
-        firstName,
-        lastName,
-        dateOfBirth,
-        gender,
-        profilePicture,
-        uploadedDocuments,
-        contactInformation: { emailAddress, phoneNumber },
-        address: { streetAddress, city, stateProvince, postalCode },
-        jobDetails: { jobTitle, departmentID, managerID, startDate, endDate },
-        salaryInformation: { salary, currency },
-        workHours: { weeklyWorkHours },
-        benefitsAndPerks: { healthInsurance, retirementPlans },
-        emergencyContact: { name, phoneNumberEmergency, relationship },
-        skillsAndQualifications: { skills, education },
-        performanceMetrics: { performanceReviews, goals },
-      },
-      { new: true }
-    );
+    try {
+      const { id } = req.params;
+  
+      // Create an empty object to store the dynamic updates
+      let updateFields = {};
+  
+      // Loop through the request body and add fields to updateFields object if they exist
+      for (const key in req.body) {
+        if (Object.prototype.hasOwnProperty.call(req.body, key)) {
+          updateFields[key] = req.body[key];
+        }
+      }
+  
+      // Find the employee via the id and update with dynamic fields
+      const updateEmployee = await Employee.findByIdAndUpdate(
+        id,
+        updateFields,
+        { new: true } // Return the updated document
+      );
     res.status(200).json(updateEmployee);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: "Error while updating the Employee" });
   }
 });

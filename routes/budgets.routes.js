@@ -38,7 +38,7 @@ router.post("/budgets", cors(corsOptions), async (req, res, next) => {
       budgetName,
       startDate,
       endDate,
-      incomeCategories: { revenue, sales, interestIncome, otherIncome },
+      incomeCategories: { revenue, sales, interestIncome, otherIncome } = {},
       expenseCategories: {
         salariesAndWages,
         rentLease,
@@ -51,7 +51,7 @@ router.post("/budgets", cors(corsOptions), async (req, res, next) => {
         taxes,
         interestExpense,
         depreciationAndAmortization,
-      },
+      } = {},
       budgetAmounts,
       actualAmounts,
       variance,
@@ -94,24 +94,35 @@ router.post("/budgets", cors(corsOptions), async (req, res, next) => {
 });
 
 router.put("/budgets/:id", cors(corsOptions), async (req, res, next) => {
-  Budget.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
   try {
-    (updateBudget) => {
-      if (!updateBudget) {
-        throw new Error("Unable to update the budget");
+    const { id } = req.params;
+
+    // Create an empty object to store the dynamic updates
+    let updateFields = {};
+
+    // Loop through the request body and add fields to updateFields object if they exist
+    for (const key in req.body) {
+      if (Object.prototype.hasOwnProperty.call(req.body, key)) {
+        updateFields[key] = req.body[key];
       }
-      res.json(updateBudget);
-    };
+    }
+
+    // Find the employee via the id and update with dynamic fields
+    const updateBudget = await Budget.findByIdAndUpdate(
+      id,
+      updateFields,
+      { new: true } // Return the updated document
+    );
+    res.status(200).json(updateBudget);
   } catch (error) {
     next(error);
   }
 });
 
 router.delete("/budgets/:id", cors(corsOptions), async (req, res, next) => {
-  await Budget.findByIdAndDelete(req.params.id);
   try {
+    const { id } = req.params;
+    await Budget.findByIdAndDelete(id);
     res.json({ message: "Budget deleted!" });
   } catch (error) {
     next(error);
