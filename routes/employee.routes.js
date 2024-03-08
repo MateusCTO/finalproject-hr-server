@@ -39,15 +39,21 @@ router.post("/employees", async (req, res) => {
       gender,
       profilePicture,
       uploadedDocuments,
-      contactInformation: { emailAddress, phoneNumber },
-      address: { streetAddress, city, stateProvince, postalCode },
-      jobDetails: { jobTitle, departmentID, managerID, startDate, endDate },
-      salaryInformation: { salary, currency },
-      workHours: { weeklyWorkHours },
-      benefitsAndPerks: { healthInsurance, retirementPlans },
-      emergencyContact: { name, phoneNumberEmergency, relationship },
-      skillsAndQualifications: { skills, education },
-      performanceMetrics: { performanceReviews, goals },
+      contactInformation: { emailAddress, phoneNumber } = {},
+      address: { streetAddress, city, stateProvince, postalCode } = {},
+      jobDetails: {
+        jobTitle,
+        departmentID,
+        managerID,
+        startDate,
+        endDate,
+      } = {},
+      salaryInformation: { salary, currency } = {},
+      workHours: { weeklyWorkHours } = {},
+      benefitsAndPerks: { healthInsurance, retirementPlans } = {},
+      emergencyContact: { name, phoneNumberEmergency, relationship } = {},
+      skillsAndQualifications: { skills, education } = {},
+      performanceMetrics: { performanceReviews, goals } = {},
     } = req.body;
 
     const newEmployee = await Employee.create({
@@ -77,29 +83,29 @@ router.post("/employees", async (req, res) => {
 
 /* Update Employee Info */
 router.put("/employees/:id", async (req, res) => {
-    /* Destructure the id via router params */
-    try {
-      const { id } = req.params;
-  
-      // Create an empty object to store the dynamic updates
-      let updateFields = {};
-  
-      // Loop through the request body and add fields to updateFields object if they exist
-      for (const key in req.body) {
-        if (Object.prototype.hasOwnProperty.call(req.body, key)) {
-          updateFields[key] = req.body[key];
-        }
+  /* Destructure the id via router params */
+  try {
+    const { id } = req.params;
+
+    // Create an empty object to store the dynamic updates
+    let updateFields = {};
+
+    // Loop through the request body and add fields to updateFields object if they exist
+    for (const key in req.body) {
+      if (Object.prototype.hasOwnProperty.call(req.body, key)) {
+        updateFields[key] = req.body[key];
       }
-  
-      // Find the employee via the id and update with dynamic fields
-      const updateEmployee = await Employee.findByIdAndUpdate(
-        id,
-        updateFields,
-        { new: true } // Return the updated document
-      );
+    }
+
+    // Find the employee via the id and update with dynamic fields
+    const updateEmployee = await Employee.findByIdAndUpdate(
+      id,
+      updateFields,
+      { new: true } // Return the updated document
+    );
     res.status(200).json(updateEmployee);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({ message: "Error while updating the Employee" });
   }
 });
