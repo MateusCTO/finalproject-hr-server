@@ -127,7 +127,7 @@ const EmployeeSchema = new Schema({
     phoneNumberEmergency: {
       type: String,
       trim: true,
-      match: [/^\+\d{11,15}$/, "Please enter a valid phone number"],
+      /* match: [/^\+\d{11,15}$/, "Please enter a valid phone number"], */
     },
     relationship: {
       type: String,
