@@ -112,11 +112,10 @@ const EmployeeSchema = new Schema({
     },
   },
   benefitsAndPerks: {
-    healthInsurance: {
-      type: Boolean,
-    },
+    healthInsurance: { type: String, enum: ["Yes", "No"] },
     retirementPlans: {
-      type: Boolean,
+      type: String,
+      enum: ["Yes", "No"],
     },
   },
   emergencyContact: {
