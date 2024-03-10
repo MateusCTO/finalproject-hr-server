@@ -11,7 +11,7 @@ const EmployeeSchema = new Schema({
   },
   dateOfBirth: {
     type: Date,
-    required: true,
+    default: Date.now,
   },
   gender: {
     type: String,
@@ -88,7 +88,7 @@ const EmployeeSchema = new Schema({
     },
     startDate: {
       type: Date,
-      required: true,
+      default: Date.now,
     },
     endDate: {
       type: Date,
@@ -107,7 +107,7 @@ const EmployeeSchema = new Schema({
   workHours: {
     weeklyWorkHours: {
       type: Number,
-      required: true,
+      default: 40,
       min: 0,
     },
   },
