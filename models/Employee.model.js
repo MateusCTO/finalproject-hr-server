@@ -10,8 +10,7 @@ const EmployeeSchema = new Schema({
     required: true,
   },
   dateOfBirth: {
-    type: Date,
-    default: Date.now,
+    type: String,
   },
   gender: {
     type: String,
@@ -87,11 +86,12 @@ const EmployeeSchema = new Schema({
       trim: true,
     },
     startDate: {
-      type: Date,
+      type: String,
       default: Date.now,
     },
     endDate: {
-      type: Date,
+      type: String,
+      default: "Active Employee",
     },
   },
   salaryInformation: {
