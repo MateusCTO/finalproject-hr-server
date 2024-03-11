@@ -6,6 +6,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 // ℹ️ Connects to the database
 require("./db");
+const bodyParser = require("body-parser");
 
 // Handles http requests (express is node js framework)
 // https://www.npmjs.com/package/express
@@ -20,6 +21,7 @@ app.use(
   })
 );
 
+app.use(bodyParser.json());
 app.use(logger("dev"));
 app.use(express.static("public"));
 

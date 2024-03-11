@@ -1,10 +1,27 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const calculateVariance = function () {
+  const variance = {};
+  const actualAmounts = this.actualAmounts;
+  const budgetAmounts = this.budgetAmounts;
+
+  for (let key in actualAmounts) {
+    if (
+      actualAmounts.hasOwnProperty(key) &&
+      budgetAmounts.hasOwnProperty(key)
+    ) {
+      variance[key] = actualAmounts[key] - budgetAmounts[key];
+    }
+  }
+
+  return variance;
+};
+
 const budgetSchema = new Schema({
   budgetName: { type: String, required: true },
-  startDate: { type: Date, default: Date.now },
-  endDate: { type: Date, required: true },
+  startDate: { type: String, default: Date.now },
+  endDate: { type: String, required: true },
   incomeCategories: {
     revenue: { type: Number, default: 0 },
     sales: { type: Number, default: 0 },
@@ -86,6 +103,13 @@ const budgetSchema = new Schema({
     enum: ["EUR", "DOL", "JPY", "BRL"],
     default: "EUR",
   },
+});
+
+budgetSchema.methods.calculateVariance = calculateVariance;
+
+budgetSchema.pre("save", function (next) {
+  this.variance = this.calculateVariance();
+  next();
 });
 
 const Budget = mongoose.model("Budget", budgetSchema);

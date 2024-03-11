@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Budget = require("../models/Budget.model");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const corsOptions = {
   origin: ["http://localhost:5005", "http://localhost:5173"],
@@ -97,23 +98,25 @@ router.put("/budgets/:id", cors(corsOptions), async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    // Create an empty object to store the dynamic updates
-    let updateFields = {};
+    // Find the budget via the id
+    const budget = await Budget.findById(id);
+
+    if (!budget) {
+      throw new Error("Budget not found");
+    }
 
     // Loop through the request body and add fields to updateFields object if they exist
     for (const key in req.body) {
       if (Object.prototype.hasOwnProperty.call(req.body, key)) {
-        updateFields[key] = req.body[key];
+        budget[key] = req.body[key];
       }
     }
 
-    // Find the employee via the id and update with dynamic fields
-    const updateBudget = await Budget.findByIdAndUpdate(
-      id,
-      updateFields,
-      { new: true } // Return the updated document
-    );
-    res.status(200).json(updateBudget);
+    // Explicitly call save to trigger the pre-save middleware
+    const updatedBudget = await budget.save();
+
+    // Optionally, handle the updated budget on the client side
+    res.status(200).json(updatedBudget);
   } catch (error) {
     next(error);
   }
