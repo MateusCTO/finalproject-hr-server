@@ -15,7 +15,7 @@ const EmployeeSchema = new Schema({
   gender: {
     type: String,
   },
-  profilePicture: {
+  imageUrl: {
     type: String, // To store the URL/path to the image
   },
   uploadedDocuments: [
@@ -23,7 +23,7 @@ const EmployeeSchema = new Schema({
       fileName: {
         type: String,
       },
-      filePath: {
+      fileUrl: {
         type: String,
       },
     },

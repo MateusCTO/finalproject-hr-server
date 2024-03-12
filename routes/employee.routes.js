@@ -4,6 +4,8 @@ const Employee = require("../models/Employee.model");
 
 // ROUTES
 
+const fileUploader = require("../config/cloudinary.config");
+
 /* Create our GET all route */
 router.get("/employees", async (req, res) => {
   try {
@@ -36,6 +38,23 @@ router.get("/employees/:id", async (req, res) => {
   }
 });
 
+router.post(
+  "/upload",
+  fileUploader.single("imageUrl", "fileUrl"),
+  (req, res, next) => {
+    // console.log("file is: ", req.file)
+    if (!req.file) {
+      next(new Error("No file uploaded!"));
+      return;
+    }
+
+    // Get the URL of the uploaded file and send it as a response.
+    // 'fileUrl' can be any name, just make sure you remember to use the same when accessing it on the frontend
+
+    res.json({ fileUrl: req.file.path });
+  }
+);
+
 /* Creating a new Employee */
 router.post("/employees", async (req, res) => {
   try {
@@ -44,8 +63,8 @@ router.post("/employees", async (req, res) => {
       lastName,
       dateOfBirth,
       gender,
-      profilePicture,
-      uploadedDocuments,
+      imageUrl,
+      uploadedDocuments: [{ fileName, fileUrl } = {}],
       contactInformation: { emailAddress, phoneNumber } = {},
       address: { streetAddress, city, stateProvince, postalCode } = {},
       jobDetails: {
@@ -68,8 +87,8 @@ router.post("/employees", async (req, res) => {
       lastName,
       dateOfBirth,
       gender,
-      profilePicture,
-      uploadedDocuments,
+      imageUrl,
+      uploadedDocuments: [({ fileName, fileUrl } = {})],
       contactInformation: { emailAddress, phoneNumber },
       address: { streetAddress, city, stateProvince, postalCode },
       jobDetails: { jobTitle, departmentID, managerID, startDate, endDate },
@@ -81,10 +100,42 @@ router.post("/employees", async (req, res) => {
       performanceMetrics: { performanceReviews, goals },
     });
 
-    res.status(200).json(newEmployee);
+    const { type } = req.query;
+
+    /*     res.status(200).json(newEmployee);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error while creating the Employee" });
+  }
+}); */
+
+    if (!type || (type !== "imageUrl" && type !== "fileUrl")) {
+      // Delete the employee if the file type is invalid
+      await Employee.findByIdAndDelete(newEmployee._id);
+      return res.status(400).json({ message: "Invalid file type specified" });
+    }
+
+    // Update the imageUrl or fileUrl field in the employee document
+    if (type === "imageUrl") {
+      newEmployee.imageUrl = req.file.path;
+    } else if (type === "fileUrl") {
+      const newDocument = {
+        fileName: req.file.originalname,
+        fileUrl: req.file.path,
+      };
+      newEmployee.uploadedDocuments.push(newDocument);
+    }
+
+    // Save the updated employee
+    await newEmployee.save();
+
+    return res.json({
+      message: "Employee created with file upload",
+      employee: newEmployee,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
