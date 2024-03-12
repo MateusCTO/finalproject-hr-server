@@ -100,7 +100,7 @@ const budgetSchema = new Schema({
   },
   currency: {
     type: String,
-    enum: ["EUR", "DOL", "JPY", "BRL"],
+    enum: ["EUR", "USD", "JPY", "BRL"],
     default: "EUR",
   },
 });

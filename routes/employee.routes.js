@@ -7,8 +7,15 @@ const Employee = require("../models/Employee.model");
 /* Create our GET all route */
 router.get("/employees", async (req, res) => {
   try {
-    const allEmployees = await Employee.find();
-    res.status(200).json(allEmployees);
+    const { departmentID } = req.query;
+    let query = {};
+
+    if (departmentID) {
+      query = { "jobDetails.departmentID": departmentID };
+    }
+
+    const filteredEmployees = await Employee.find(query);
+    res.status(200).json(filteredEmployees);
   } catch (error) {
     res.status(500).json({ message: "Error while getting employees" });
   }
