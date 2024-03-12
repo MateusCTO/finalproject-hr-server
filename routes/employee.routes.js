@@ -88,7 +88,7 @@ router.post("/employees", async (req, res) => {
       dateOfBirth,
       gender,
       imageUrl,
-      uploadedDocuments: [({ fileName, fileUrl } = {})],
+      uploadedDocuments: [{ fileName, fileUrl }],
       contactInformation: { emailAddress, phoneNumber },
       address: { streetAddress, city, stateProvince, postalCode },
       jobDetails: { jobTitle, departmentID, managerID, startDate, endDate },
