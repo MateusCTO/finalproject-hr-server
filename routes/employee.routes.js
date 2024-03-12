@@ -40,18 +40,22 @@ router.get("/employees/:id", async (req, res) => {
 
 router.post(
   "/upload",
-  fileUploader.single("imageUrl", "fileUrl"),
+  fileUploader.fields([
+    { name: "imageUrl" },
+    { name: "uploadedDocuments.fileUrl" },
+  ]),
   (req, res, next) => {
-    // console.log("file is: ", req.file)
-    if (!req.file) {
+    // Check if any of the files are missing
+    if (!req.files.imageUrl || !req.files.uploadedDocuments.fileUrl) {
       next(new Error("No file uploaded!"));
       return;
     }
 
-    // Get the URL of the uploaded file and send it as a response.
-    // 'fileUrl' can be any name, just make sure you remember to use the same when accessing it on the frontend
+    // Get the URLs of the uploaded files and send them as a response.
+    const imageUrl = req.files.imageUrl[0].path;
+    const fileUrl = req.files.uploadedDocuments.fileUrl[0].path;
 
-    res.json({ fileUrl: req.file.path });
+    res.json({ imageUrl, fileUrl });
   }
 );
 
@@ -64,7 +68,7 @@ router.post("/employees", async (req, res) => {
       dateOfBirth,
       gender,
       imageUrl,
-      uploadedDocuments: [{ fileName, fileUrl } = {}],
+      uploadedDocuments: { fileName, fileUrl } = {},
       contactInformation: { emailAddress, phoneNumber } = {},
       address: { streetAddress, city, stateProvince, postalCode } = {},
       jobDetails: {
@@ -88,7 +92,7 @@ router.post("/employees", async (req, res) => {
       dateOfBirth,
       gender,
       imageUrl,
-      uploadedDocuments: [({ fileName, fileUrl } = {})],
+      uploadedDocuments: [{ fileName, fileUrl }],
       contactInformation: { emailAddress, phoneNumber },
       address: { streetAddress, city, stateProvince, postalCode },
       jobDetails: { jobTitle, departmentID, managerID, startDate, endDate },

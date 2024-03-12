@@ -13,6 +13,9 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
 
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
 // MIDDLEWARE
 // Use the CORS middleware with options to allow requests from specific IP addresses and domains
 app.use(
