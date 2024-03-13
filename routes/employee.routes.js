@@ -4,8 +4,6 @@ const Employee = require("../models/Employee.model");
 
 // ROUTES
 
-const fileUploader = require("../config/cloudinary.config");
-
 /* Create our GET all route */
 router.get("/employees", async (req, res) => {
   try {

@@ -18,8 +18,9 @@ const userSchema = new Schema(
       required: [true, "Name is required."],
     },
     phone_number: {
-      type: String, 
-  }
+      type: String,
+    },
+    imageUrl: { type: String },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
