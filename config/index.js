@@ -14,7 +14,10 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const FRONTEND_URL =
-  process.env.ORIGIN || "http://localhost:3000" || "http://localhost:5173";
+  "https://final-project-hr.vercel.app" ||
+  process.env.ORIGIN ||
+  "http://localhost:3000" ||
+  "http://localhost:5173";
 
 // Middleware configuration
 module.exports = (app) => {
