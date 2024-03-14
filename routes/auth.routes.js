@@ -128,4 +128,10 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
   res.status(200).json(req.payload);
 });
 
+router.get("/user", isAuthenticated, (req, res, next) => {
+  // The user details are available in req.payload due to the isAuthenticated middleware
+  const user = req.payload;
+  res.status(200).json({ user });
+});
+
 module.exports = router;
